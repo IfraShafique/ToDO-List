@@ -49,14 +49,14 @@ export default function Items(props) {
         ) : (
           <span className='bg-[#F685EE]'>
             <i
-              className='fa-regular fa-pen-to-square fa-sm text-[#D70FC6]  hover:text-black'
+              className='fa-regular fa-pen-to-square fa-sm sm:text-[#D70FC6] text-white  hover:text-black'
               onClick={() => setIsEditing(true)}
             ></i>
           </span>
         )}
         &nbsp;&nbsp;
         <i
-          className='fa-regular fa-trash-can sm:fa-2xl text-sm text-[#D70FC6] hover:text-black'
+          className='fa-regular fa-trash-can sm:fa-2xl text-sm sm:text-[#D70FC6] text-white hover:text-black'
           onClick={() => props.removeHandler(props.id)}
         ></i>
       </div>
