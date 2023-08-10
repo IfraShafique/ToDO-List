@@ -1,8 +1,18 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Items from './Items'
 
 export default function Enteries(props) {
-  const items = props.data.map((singleData) => {
+  const [sortedData, setSortedData] = useState([]);
+
+  useEffect(() => {
+    // Sort the data when the component renders or when props.data changes
+    const sortedItems = [...props.data].sort((a, b) =>
+      a.item.localeCompare(b.item)
+    );
+    setSortedData(sortedItems);
+  }, [props.data]);
+
+  const items = sortedData.map((singleData) => {
     const capitalizeCase =
       singleData.item.charAt(0).toUpperCase() + singleData.item.slice(1);
 
