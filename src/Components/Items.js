@@ -49,7 +49,7 @@ export default function Items(props) {
         ) : (
           <span className='bg-[#F685EE]'>
             <i
-              className='fa-regular fa-pen-to-square fa-sm sm:text-[#D70FC6] text-white  hover:text-black'
+              className='fa-regular fa-pen-to-square fa-sm sm:text-[#D70FC6] text-white hover:text-black'
               onClick={() => setIsEditing(true)}
             ></i>
           </span>
