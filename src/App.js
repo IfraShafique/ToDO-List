@@ -1,28 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import Input from './Components/InputField';
-import Enteries from './Components/Enteries';
 
-// Set the data in local location 
-const getLocalItems = () => {
-  const list = localStorage.getItem('lists');
-  return list ? JSON.parse(list) : [];
-};
+import Input from "./Components/InputField";
+import Enteries from "./Components/Enteries";
+import React, {useState, useEffect} from 'react'
+
+
+// Get data from local storage
+const getLocalItems = () =>{
+  let list = localStorage.getItem('lists');
+  
+
+  if (list) {
+    return JSON.parse(localStorage.getItem('lists'));
+  } else {
+    return [];
+  }
+}
 
 function App() {
-  const [todos, setTodos] = useState(getLocalItems());
+  const [todos,setTodos] = useState(getLocalItems());
 
+  // Set Data From Local Storage
   useEffect(() => {
-    localStorage.setItem('lists', JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem('lists',JSON.stringify(todos))
+}, [todos]);
 
 
-  // Remove Items
-  const removeToDo = (id) => {
-    const newTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodos);
-  };
 
-  // Update or edit in list
+// Remove Item Functionality
+const removeToDO = (id) => {
+  const newTodos = todos.filter((todo) => todo.id !== id);
+  setTodos(newTodos);
+
+};
+
+
+  //Edit functionality 
   const updateTodo = (id, updatedItem) => {
     const updatedTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, item: updatedItem } : todo
@@ -30,45 +42,91 @@ function App() {
     setTodos(updatedTodos);
   };
 
-  // Add Items And remove duplicate entries
+  // Add Item Functionality
   const addToDoHandler = (item) => {
-    const isDuplicate = todos.some((todo) => todo.item === item);
-
-    if (!isDuplicate) {
-      setTodos([
-        ...todos,
+    
+    setTodos(
+      [...todos,
         {
           item,
           time: new Date().toLocaleDateString(),
-          id: Date.now(),
-        },
-      ]);
-    }
-  };
+          id: Date.now()
+        }
+      ]
+    )
 
-  // Add when click on enter button
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && event.target.value.trim() !== '') {
-      addToDoHandler(event.target.value);
-      event.target.value = '';
-    }
-  };
+    
+  }
+  // Enter Event Handler
+  // const handleKeyPress = (event) => {
+    // if(event.key === "Enter"){
+    //   addToDoHandler(event.target.value);
+    //   event.target.value = "";
+    // }
+
+  //   if (event.key === "Enter" && event.target.value.trim() !== '') {
+  //     addToDoHandler(event.target.value);
+  //     event.target.value = '';
+  //   }
+    
+  // }
+  // useEffect(() => {
+  //   window.addEventListener("keydown", handleKeyPress);
+  //   return () => {
+  //     window.removeEventListener("keydown",handleKeyPress)
+  //   };
+  // }, [todos]);
+
+  // useEffect(() => {
+  //   window.addEventListener("keydown", handleKeyPress);
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyPress);
+  //   };
+  // }, []);
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && event.target.value.trim() !== "") {
+        addToDoHandler(event.target.value);
+        event.target.value = "";
+      }
     };
-  }, []);
+  
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [addToDoHandler]);
+  
+  
+    
+
+
+  // Duplicate Enteries remove
+
+  useEffect(() => {
+    const updateTodos = todos.filter((todo, index) =>
+      index === todos.findIndex(t => t.item === todo.item)
+    );
+
+    setTodos(updateTodos);
+  }, [todos]);
+
+    // useEffect(() => {
+    //   const updatedTodos = todos.filter((todo, index) =>
+    //     index === todos.findIndex(t => t.item === todo.item)
+    //   );
+    //   setTodos(updatedTodos);
+    // }, []);
+  
 
   return (
-    <div className='bg-[#350435] h-screen p-3 flex'>
-      <div className='w-[95%] h-[60vh] sm:w-[50%] sm:h-[80vh] shadow-2xl rounded bg-[#FFE6FC] m-auto'>
-        <h1 className='text-center font-bold text-white text-xl bg-[#913891] p-2 sm:text-2xl sm:p-3 xl:text-4xl'>
-          ToDo List
-        </h1>
-        <Input handler={addToDoHandler} />
-        <Enteries data={todos} removeHandler={removeToDo} updateTodo={updateTodo} />
+    <div className="bg-[#350435] h-screen p-3 flex">
+      <div className="w-[95%] h-[60vh] sm:w-[50%] sm:h-[80vh] shadow-2xl rounded bg-[#FFE6FC] m-auto">
+        <h1 className="text-center font-bold text-white text-xl bg-[#913891] p-2 sm:text-2xl sm:p-3 xl:text-4xl">ToDo List </h1>
+        <Input handler = {addToDoHandler} />
+        <Enteries data = {todos} removeHandler={removeToDO} updateTodo= {updateTodo}/>
+
       </div>
     </div>
   );
