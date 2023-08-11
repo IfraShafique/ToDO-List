@@ -55,29 +55,51 @@ const removeToDO = (id) => {
   }
   // Enter Event Handler
   const handleKeyPress = (event) => {
-    if(event.key === "Enter"){
+    // if(event.key === "Enter"){
+    //   addToDoHandler(event.target.value);
+    //   event.target.value = "";
+    // }
+
+    if (event.key === "Enter" && event.target.value.trim() !== "") {
       addToDoHandler(event.target.value);
       event.target.value = "";
     }
+    
   }
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown",handleKeyPress)
-    };
-  }, [todos]);
+  // useEffect(() => {
+  //   window.addEventListener("keydown", handleKeyPress);
+  //   return () => {
+  //     window.removeEventListener("keydown",handleKeyPress)
+  //   };
+  // }, [todos]);
+
+    useEffect(() => {
+      window.addEventListener("keydown", handleKeyPress);
+      return () => {
+        window.removeEventListener("keydown", handleKeyPress);
+      };
+    }, []);
+    
 
 
   // Duplicate Enteries remove
 
-  useEffect(() => {
-    const updateTodos = todos.filter((todo, index) =>
-      index === todos.findIndex(t => t.item === todo.item)
-    );
+  // useEffect(() => {
+  //   const updateTodos = todos.filter((todo, index) =>
+  //     index === todos.findIndex(t => t.item === todo.item)
+  //   );
 
-    setTodos(updateTodos);
-  }, [todos]);
+  //   setTodos(updateTodos);
+  // }, [todos]);
+
+    useEffect(() => {
+      const updatedTodos = todos.filter((todo, index) =>
+        index === todos.findIndex(t => t.item === todo.item)
+      );
+      setTodos(updatedTodos);
+    }, []);
+  
 
   return (
     <div className="bg-[#350435] h-screen p-3 flex">
